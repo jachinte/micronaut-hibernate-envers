@@ -1,0 +1,31 @@
+micronaut:
+  application:
+    name: myservice
+  server:
+    port: 5050
+---
+datasources:
+  default:
+    url: 'jdbc:postgresql://localhost:5432/${db-name}'
+    username: '${db-username}'
+    password: '${db-password}'
+    dialect: POSTGRES
+    schema-generate: NONE
+    driverClassName: org.postgresql.Driver
+jpa:
+  default:
+    entity-scan:
+      packages:
+        - 'com.example.myservice.domain'
+    properties:
+      hibernate:
+        bytecode:
+          provider: none
+        generate_statistics: true
+        hbm2ddl:
+          auto: validate
+        show_sql: true
+liquibase:
+  datasources:
+    default:
+      change-log: classpath:db/liquibase-changelog.xml

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <!-- SCHEMA -->
+  <changeSet id="01" author="miguel">
+    <sql dbms="postgresql" endDelimiter=";">
+      CREATE SCHEMA myschema
+    </sql>
+    <rollback>
+      DROP SCHEMA IF EXISTS myschema;
+    </rollback>
+  </changeSet>
+
+  <!-- REVISIONS -->
+  <changeSet id="02" author="author">
+    <createTable tableName="revisions"
+                 catalogName="mycatalog"
+                 schemaName="myschema"
+                 remarks="A table for all revisions">
+      <column name="id"
+              type="int"
+              autoIncrement="true">
+        <constraints nullable="false"
+                     unique="true"
+                     primaryKey="true"/>
+      </column>
+      <column name="timestamp"
+              type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_id"
+              type="varchar(36)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <!-- USERS -->
+  <changeSet id="03" author="author">
+    <createTable tableName="users"
+                 catalogName="mycatalog"
+                 schemaName="myschema"
+                 remarks="A table for all users">
+      <column name="id"
+              type="varchar(36)">
+        <constraints nullable="false"
+                     unique="true"
+                     primaryKey="true"/>
+      </column>
+    </createTable>
+    <createTable tableName="users_AUD"
+                 catalogName="mycatalog"
+                 schemaName="myschema"
+                 remarks="An audit table for changes in table users">
+      <column name="id"
+              type="varchar(36)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revision_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="smallint"/>
+    </createTable>
+    <addPrimaryKey catalogName="mycatalog"
+                   columnNames="id, revision_id"
+                   schemaName="myschema"
+                   tableName="users_AUD"/>
+    <addForeignKeyConstraint baseColumnNames="revision_id"
+                             baseTableCatalogName="mycatalog"
+                             baseTableName="users_AUD"
+                             baseTableSchemaName="myschema"
+                             constraintName="FK_revision_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             onDelete="NO ACTION"
+                             onUpdate="NO ACTION"
+                             referencedColumnNames="id"
+                             referencedTableCatalogName="mycatalog"
+                             referencedTableName="revisions"
+                             referencedTableSchemaName="myschema"/>
+  </changeSet>
+
+  <!-- REVISIONS-USERS -->
+  <changeSet id="04" author="author">
+    <addForeignKeyConstraint baseColumnNames="user_id"
+                             baseTableCatalogName="mycatalog"
+                             baseTableName="revisions"
+                             baseTableSchemaName="myschema"
+                             constraintName="FK_user_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             onDelete="NO ACTION"
+                             onUpdate="NO ACTION"
+                             referencedColumnNames="id"
+                             referencedTableCatalogName="mycatalog"
+                             referencedTableName="users"
+                             referencedTableSchemaName="myschema"/>
+  </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,43 @@
+### Eclipse ###
+
+.project
+.settings
+.classpath
+
+### Intellij ###
+
+# User-specific stuff:
+.idea
+
+## File-based project format:
+*.iws
+*.iml
+*.ipr
+modules.xml
+
+## Plugin-specific files:
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+### Others ###
+
+.env
+Thumbs.db
+.DS_Store
+.gradle
+bin/
+out/
+build/
+target/
+data/
